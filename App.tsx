@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {
+  // Clipboard,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   //TextInput,
   View,
 } from 'react-native';
 // import {BouncyCheckboxHandle} from 'react-native-bouncy-checkbox';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import Slider from '@react-native-community/slider';
@@ -87,8 +90,8 @@ export default function App() {
             initialValues={{passwordLength: 4}}
             validationSchema={PasswordSchema}
             onSubmit={values => {
-              console.log(values);
-              generatePassword(Number(values.passwordLength)); // Todo
+              //  console.log(values);
+              generatePassword(Number(values.passwordLength));
             }}>
             {({
               values,
@@ -122,41 +125,70 @@ export default function App() {
                 <Text style={styles.label}>
                   Current Password Length: {values.passwordLength}
                 </Text>
-
-                <View style={styles.checkbox}>
-                  <View style={styles.checkboxItem}>
-                    <Text style={styles.text}>Include lowerCase</Text>
+                <View style={styles.checkboxItem}>
+                  <Text style={styles.text}>Include lowerCase</Text>
+                  <View>
                     <BouncyCheckbox
+                      // style={styles.checkboxItem}
+                      // style={styles.box}
                       isChecked={lowerCase}
                       onPress={() => setLowerCase(!lowerCase)}
-                      fillColor="#29AB87"
+                      fillColor="#FF0000"
                     />
                   </View>
-                  <View style={styles.checkboxItem}>
-                    <Text style={styles.text}>Include UpperCase</Text>
+                </View>
+                <View style={styles.checkboxItem}>
+                  <Text style={styles.text}>Include upperCase</Text>
+                  <View>
                     <BouncyCheckbox
+                      // style={styles.checkboxItem}
+                      // style={styles.box}
                       isChecked={upperCase}
                       onPress={() => setUpperCase(!upperCase)}
-                      fillColor="#29AB87"
+                      fillColor="#FFA500"
                     />
                   </View>
-                  <View style={styles.checkboxItem}>
-                    <Text style={styles.text}>Include Numbers</Text>
+                </View>
+
+                <View style={styles.checkboxItem}>
+                  <Text style={styles.text}>Include Numbers</Text>
+                  <View>
                     <BouncyCheckbox
+                      // style={styles.checkboxItem}
+                      // style={styles.box}
                       isChecked={numbers}
                       onPress={() => setNumbers(!numbers)}
                       fillColor="#29AB87"
                     />
                   </View>
-                  <View style={styles.checkboxItem}>
-                    <Text style={styles.text}>Include Symbols</Text>
+                </View>
+
+                <View style={styles.checkboxItem}>
+                  <Text style={styles.text}>Include Symbols</Text>
+                  <View>
                     <BouncyCheckbox
+                      // style={styles.checkboxItem}
+                      // style={styles.box}
                       isChecked={symbols}
                       onPress={() => setSymbols(!symbols)}
-                      fillColor="#29AB87"
+                      fillColor="#007BFF"
                     />
                   </View>
                 </View>
+
+                <TouchableOpacity onPress={handleSubmit}>
+                  <Text style={styles.GenPass}>Generate Password</Text>
+                </TouchableOpacity>
+
+                {ispassGenerated && (
+                  <View style={styles.gen}>
+                    <Text style={styles.pass}>Your Password</Text>
+                    <TouchableOpacity
+                      onPress={() => Clipboard.setString(password)}>
+                      <Text style={styles.pass1}>{password}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </>
             )}
           </Formik>
@@ -170,26 +202,30 @@ const styles = StyleSheet.create({
   app: {
     fontSize: 24,
     textAlign: 'center',
-    color: 'white',
+    color: 'gray',
     marginBlockEnd: 20,
   },
-  checkbox: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
+  // checkbox: {
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   justifyContent: 'flex-start',
+  //   alignItems: 'flex-start',
+  // },
 
   checkboxItem: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    padding: 10,
+    marginBlockStart: 10,
   },
   text: {
-    // flex: 1,
+    fontSize: 20,
+    color: 'gray',
   },
+  // checkboxWraper: {
+  //   //justifyContent: 'flex-end',
+  // },
 
   label: {
     marginBlockStart: 20,
@@ -197,10 +233,42 @@ const styles = StyleSheet.create({
     fontSize: 18,
     // marginBottom: 20,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'gray',
   },
   slider: {
     width: 250,
     height: 40,
+  },
+
+  GenPass: {
+    fontSize: 25,
+    marginBlockStart: 50,
+    textAlign: 'center',
+    color: 'lightgray',
+    fontWeight: 'bold',
+    //cursor: 'pointer',
+    //backgroundColor: 'blue',
+  },
+
+  gen: {
+    height: 120,
+    marginBlockStart: 40,
+    backgroundColor: 'white',
+  },
+  pass: {
+    fontSize: 24,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  pass1: {
+    marginBlockStart: 15,
+    fontSize: 24,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'gray',
+    //alignContent: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: '#ffffff',
   },
 });
